@@ -23,5 +23,5 @@ missing
 mkinstalldirs
 modules/
 run-tests.php
-xpool.la
-xpool.lo
+*.la
+*.lo
