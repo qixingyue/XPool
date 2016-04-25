@@ -4,6 +4,7 @@ if(!extension_loaded("xpool")){
 	dl("xpool.so");
 }
 
+$rf = new ReflectionExtension("xpool");
 
 class M_Pool extends X_Pool {
 
@@ -21,17 +22,17 @@ $x_run_pool = new M_Pool();
 $worker_count = 8;
 
 //子进程最大的空闲周期
-$max_free_tick = 256;
+$max_free_tick = 10000 ;
 
 $res = $x_run_pool->init($worker_count,$max_free_tick);
 
 //子进程返回，必要的时候，可以做部分清理工作
-if($res == -1) {
+if($res == XPOOL_INIT_CHILD) {
 	printf("This is child , bye ! \n");
 	exit();
 }
 
-if($res == -2){
+if($res == XPOOL_INIT_FAILED){
 	printf("Xpool init failed . \n");
 	exit();
 }
@@ -44,4 +45,5 @@ while(true){
 		,'id'=>mt_rand(1,2000)
 	);
 	$x_run_pool->addTask(serialize($d));
+	sleep(1);
 }

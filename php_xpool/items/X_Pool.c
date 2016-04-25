@@ -33,18 +33,22 @@ PHP_METHOD(X_Pool,addTask){
 	struct task_data data;
 	char *buf;
 	int len;
+	int res;
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",&buf,&len) == FAILURE) {
-		return ;
+		RETURN_FALSE;
 	}
 
 	if(len >= X_MAX_SIZE){
-		RETURN_FALSE;	
+		RETURN_LONG(XPOOL_STATUS_TOO_LARGE);
 	}
 
 	memcpy(data.buf,buf,len);
-
-	xpool_add_task(&data,0);
-	RETURN_TRUE;
+	res = xpool_add_task(&data,0);
+	if(res == x_busy) {
+		RETURN_LONG(XPOOL_STATUS_BUSY);
+	} else {
+		RETURN_LONG(XPOOL_STATUS_OK);
+	}
 }
 
 PHP_METHOD(X_Pool,init){
@@ -62,13 +66,17 @@ PHP_METHOD(X_Pool,init){
 			&& instanceof_function(Z_OBJCE_PP(self_pp), X_Pool_class_ce TSRMLS_CC)
 		){
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l|l",&worker_count,&max_free_tick) == FAILURE) {
-			RETURN_LONG(-2);
+			RETURN_LONG(XPOOL_INIT_FAILED);
 		}
 		r = xpool_init(worker_count,max_free_tick,do_real_task,sizeof(struct task_data) );
-		RETURN_LONG(r);
+		if( r == 0) {
+			RETURN_LONG(XPOOL_INIT_OK);
+		} else {
+			RETURN_LONG(XPOOL_INIT_CHILD);
+		}
 	} else {
 		zend_error(E_STRICT,"No %s Class object named %s found ! \n",X_Pool_class_ce->name,XPOOL_G(xpool_var_name));	
-		RETURN_LONG(-2);
+		RETURN_LONG(XPOOL_INIT_FAILED);
 	}
 }
 
@@ -84,9 +92,20 @@ zend_function_entry X_Pool_methods[] = {
 };
 
 XPOOL_STARTUP_FUNCTION(X_Pool){
+
+	REGISTER_LONG_CONSTANT("XPOOL_STATUS_OK", XPOOL_STATUS_OK , CONST_PERSISTENT | CONST_CS);
+	REGISTER_LONG_CONSTANT("XPOOL_STATUS_BUSY", XPOOL_STATUS_BUSY , CONST_PERSISTENT | CONST_CS);
+	REGISTER_LONG_CONSTANT("XPOOL_STATUS_TOO_LARGE", XPOOL_STATUS_TOO_LARGE , CONST_PERSISTENT | CONST_CS);
+
+	REGISTER_LONG_CONSTANT("XPOOL_INIT_OK", XPOOL_INIT_OK , CONST_PERSISTENT | CONST_CS);
+	REGISTER_LONG_CONSTANT("XPOOL_INIT_CHILD", XPOOL_INIT_CHILD, CONST_PERSISTENT | CONST_CS);
+	REGISTER_LONG_CONSTANT("XPOOL_INIT_FAILED", XPOOL_INIT_FAILED, CONST_PERSISTENT | CONST_CS);
+
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "X_Pool", X_Pool_methods);
 	X_Pool_class_ce = zend_register_internal_class(&ce TSRMLS_CC);
+
+
 	// X_Pool_class_ce = zend_register_internal_interface(&ce TSRMLS_CC);
 	// zend_declare_property_null(X_Pool_class_ce ,ZEND_STRL("testProperty"),ZEND_ACC_PUBLIC TSRMLS_DC);
 }

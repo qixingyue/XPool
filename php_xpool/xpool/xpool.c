@@ -99,7 +99,7 @@ static x_bool x_should_exit(int child_no){
 		return x_true;	
 	} else {
 		x_list[child_no].free_tick += 1;
-		usleep(100);
+		usleep(1000);
 		return x_false;
 	}
 }
