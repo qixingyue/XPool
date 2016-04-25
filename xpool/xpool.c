@@ -30,14 +30,14 @@ int xpool_init(int wn,int mft,x_task_handler handler,size_t tds){
 	return 0;
 }
 
-void xpool_add_task(x_task_data *data_p,int times){
+x_status xpool_add_task(x_task_data *data_p,int times){
 
 	int i;
 	int back_res;
 	size_t read_size;
 
 	if( 10 == times){
-		return ;	
+		return x_busy;	
 	} else if( 0 == times) {
 			
 	} else {
@@ -49,7 +49,7 @@ void xpool_add_task(x_task_data *data_p,int times){
 		if(x_list[i].state == STATE_FREE)	{
 			x_list[i].state = STATE_BUSY;
 			write(x_list[i].pipe[1],data_p,x_task_data_size);
-			return ;
+			return x_ok;
 		}
 	}	
 
@@ -64,7 +64,7 @@ void xpool_add_task(x_task_data *data_p,int times){
 	}
 
 	//重新插入任务
-	xpool_add_task(data_p,times + 1);
+	return xpool_add_task(data_p,times + 1);
 }
 
 static void xpool_work_loop(int child_no){

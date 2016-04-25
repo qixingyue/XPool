@@ -31,7 +31,13 @@ int main(){
 	} else {
 		while(1){
 			RAND(&m.value,2000);
-			xpool_add_task(&m,0);	
+
+			if( x_ok != xpool_add_task(&m,0)){
+					if(x_ok != xpool_add_task(&m,0)){
+						printf("TOO MUCH TASKS .\n");
+						break;	
+					}
+			}
 		}
 		while(1);
 		return 0;
