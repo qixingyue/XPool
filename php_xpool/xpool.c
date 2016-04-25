@@ -40,7 +40,7 @@ PHP_MINIT_FUNCTION(xpool)
 {
 	REGISTER_INI_ENTRIES();
 
-	XPOOL_STARTUP(S_propool);
+	/*XPOOL_STARTUP(S_propool);*/
 
 	return SUCCESS;
 }
