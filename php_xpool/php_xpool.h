@@ -34,9 +34,10 @@ PHP_RSHUTDOWN_FUNCTION(xpool);
 PHP_MINFO_FUNCTION(xpool);
 
 ZEND_BEGIN_MODULE_GLOBALS(xpool)
-	long  global_value;
-	char *global_string;
+	char *xpool_var_name;
 ZEND_END_MODULE_GLOBALS(xpool)
+
+extern ZEND_DECLARE_MODULE_GLOBALS(xpool);
 
 #ifdef ZTS
 #define XPOOL_G(v) TSRMG(xpool_globals_id, zend_xpool_globals *, v)

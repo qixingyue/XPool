@@ -32,15 +32,13 @@ ZEND_GET_MODULE(xpool)
 #endif
 
 PHP_INI_BEGIN()
-    STD_PHP_INI_ENTRY("xpool.global_value",      "42", PHP_INI_ALL, OnUpdateLong, global_value, zend_xpool_globals, xpool_globals)
-    STD_PHP_INI_ENTRY("xpool.global_string", "foobar", PHP_INI_ALL, OnUpdateString, global_string, zend_xpool_globals, xpool_globals)
+    STD_PHP_INI_ENTRY("xpool.xpool_var_name", "x_run_pool", PHP_INI_ALL, OnUpdateString, xpool_var_name, zend_xpool_globals, xpool_globals)
 PHP_INI_END()
 
 PHP_MINIT_FUNCTION(xpool)
 {
 	REGISTER_INI_ENTRIES();
-
-	/*XPOOL_STARTUP(S_propool);*/
+	XPOOL_STARTUP(X_Pool);
 
 	return SUCCESS;
 }
