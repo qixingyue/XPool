@@ -8,4 +8,4 @@ ${PHP_BIN}phpize
 make
 sudo make install
 
-${PHP_BIN}php scraw.php
+${PHP_BIN}php xpool.php
