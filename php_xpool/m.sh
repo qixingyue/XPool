@@ -10,14 +10,14 @@ j="#"
 
 cat > items/${module_name}.h <<EOT
 
-${j}ifndef SCRAW_${u_module_name}_H
-${j}define SCRAW_${u_module_name}_H
+${j}ifndef XPOOL_${u_module_name}_H
+${j}define XPOOL_${u_module_name}_H
 
 ${j}include "php_xpool.h"
 
 extern zend_class_entry *${module_name}_class_ce;
 
-SCRAW_STARTUP_FUNCTION(${module_name});
+XPOOL_STARTUP_FUNCTION(${module_name});
 
 ${j}endif
 
@@ -36,7 +36,7 @@ zend_function_entry ${module_name}_methods[] = {
 	{NULL, NULL, NULL}
 };
 
-SCRAW_STARTUP_FUNCTION(${module_name}){
+XPOOL_STARTUP_FUNCTION(${module_name}){
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "${module_name}", ${module_name}_methods);
 	${module_name}_class_ce = zend_register_internal_class(&ce TSRMLS_CC);
@@ -59,4 +59,4 @@ done
 ) > little_items.h
 
 echo "COPY THIS LINE TO xpool.c "
-echo "SCRAW_STARTUP(${module_name});"
+echo "XPOOL_STARTUP(${module_name});"
