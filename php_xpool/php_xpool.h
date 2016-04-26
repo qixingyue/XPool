@@ -53,4 +53,6 @@ extern ZEND_DECLARE_MODULE_GLOBALS(xpool);
 
 #define SEE_ZVAL(name,zp) php_printf("\nBEGIN SEE ZVAL %s \n",name); zend_print_zval_r(zp,0 TSRMLS_CC); php_printf("END SEE ZVAL %s \n",name);
 
+
+#define XPOOL_END(number) exit(number)
 #endif

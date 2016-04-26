@@ -9,6 +9,7 @@ $rf = new ReflectionExtension("xpool");
 class M_Pool extends X_Pool {
 
 	public function handle($data){
+		echo $data . "\n";
 		$obj = unserialize($data);	
 		echo $obj['id'] . "\n";
 	}
@@ -19,7 +20,7 @@ class M_Pool extends X_Pool {
 $x_run_pool = new M_Pool();
 
 //子进程数
-$worker_count = 8;
+$worker_count = 1;
 
 //子进程最大的空闲周期
 $max_free_tick = 10000 ;

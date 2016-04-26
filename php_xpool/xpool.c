@@ -1,6 +1,7 @@
 #include "php_xpool.h"
 #include "little_items.h"
 
+
 ZEND_DECLARE_MODULE_GLOBALS(xpool)
 
 static int le_xpool;
@@ -38,6 +39,8 @@ PHP_INI_END()
 PHP_MINIT_FUNCTION(xpool)
 {
 	REGISTER_INI_ENTRIES();
+
+
 	XPOOL_STARTUP(X_Pool);
 
 	return SUCCESS;

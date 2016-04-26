@@ -17,5 +17,4 @@ PHP_NEW_EXTENSION(xpool, xpool.c \
 		xpool/xpool.c \
 		, $ext_shared)
 	PHP_ADD_BUILD_DIR([$ext_builddir/items])
-	PHP_ADD_BUILD_DIR([$ext_builddir/propool])
 fi

@@ -1,6 +1,8 @@
 #include "X_Pool.h"
 #include "xpool/xpool.h"
 
+#include "main/SAPI.h"
+
 struct task_data {
 	char buf[X_MAX_SIZE];
 };
@@ -8,7 +10,7 @@ struct task_data {
 void do_real_task(struct task_data *data){
  	zval **self_pp, *retval , *arg;
 
-	php_printf("%s\n",data->buf);
+	/*php_printf("%s\n",data->buf);*/
 
 	MAKE_STD_ZVAL(arg);
 	ZVAL_STRINGL(arg,data->buf,strlen(data->buf),0);
@@ -93,21 +95,20 @@ zend_function_entry X_Pool_methods[] = {
 
 XPOOL_STARTUP_FUNCTION(X_Pool){
 
-	REGISTER_LONG_CONSTANT("XPOOL_STATUS_OK", XPOOL_STATUS_OK , CONST_PERSISTENT | CONST_CS);
-	REGISTER_LONG_CONSTANT("XPOOL_STATUS_BUSY", XPOOL_STATUS_BUSY , CONST_PERSISTENT | CONST_CS);
-	REGISTER_LONG_CONSTANT("XPOOL_STATUS_TOO_LARGE", XPOOL_STATUS_TOO_LARGE , CONST_PERSISTENT | CONST_CS);
+	if (strncasecmp("cli", sapi_module.name, strlen(sapi_module.name)) == 0){
+		REGISTER_LONG_CONSTANT("XPOOL_STATUS_OK", XPOOL_STATUS_OK , CONST_PERSISTENT | CONST_CS);
+		REGISTER_LONG_CONSTANT("XPOOL_STATUS_BUSY", XPOOL_STATUS_BUSY , CONST_PERSISTENT | CONST_CS);
+		REGISTER_LONG_CONSTANT("XPOOL_STATUS_TOO_LARGE", XPOOL_STATUS_TOO_LARGE , CONST_PERSISTENT | CONST_CS);
 
-	REGISTER_LONG_CONSTANT("XPOOL_INIT_OK", XPOOL_INIT_OK , CONST_PERSISTENT | CONST_CS);
-	REGISTER_LONG_CONSTANT("XPOOL_INIT_CHILD", XPOOL_INIT_CHILD, CONST_PERSISTENT | CONST_CS);
-	REGISTER_LONG_CONSTANT("XPOOL_INIT_FAILED", XPOOL_INIT_FAILED, CONST_PERSISTENT | CONST_CS);
+		REGISTER_LONG_CONSTANT("XPOOL_INIT_OK", XPOOL_INIT_OK , CONST_PERSISTENT | CONST_CS);
+		REGISTER_LONG_CONSTANT("XPOOL_INIT_CHILD", XPOOL_INIT_CHILD, CONST_PERSISTENT | CONST_CS);
+		REGISTER_LONG_CONSTANT("XPOOL_INIT_FAILED", XPOOL_INIT_FAILED, CONST_PERSISTENT | CONST_CS);
 
-	zend_class_entry ce;
-	INIT_CLASS_ENTRY(ce, "X_Pool", X_Pool_methods);
-	X_Pool_class_ce = zend_register_internal_class(&ce TSRMLS_CC);
+		zend_class_entry ce;
+		INIT_CLASS_ENTRY(ce, "X_Pool", X_Pool_methods);
+		X_Pool_class_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	} 
 
-
-	// X_Pool_class_ce = zend_register_internal_interface(&ce TSRMLS_CC);
-	// zend_declare_property_null(X_Pool_class_ce ,ZEND_STRL("testProperty"),ZEND_ACC_PUBLIC TSRMLS_DC);
 }
 
 
