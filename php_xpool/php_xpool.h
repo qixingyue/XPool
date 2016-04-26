@@ -7,7 +7,10 @@
 
 #include "php.h"
 #include "php_ini.h"
+#include "main/SAPI.h"
+#include "Zend/zend_alloc.h"
 #include "ext/standard/info.h"
+#include "ext/standard/php_string.h"
 #include "Zend/zend_interfaces.h"
 
 extern zend_module_entry xpool_module_entry;
@@ -55,4 +58,5 @@ extern ZEND_DECLARE_MODULE_GLOBALS(xpool);
 
 
 #define XPOOL_END(number) exit(number)
+
 #endif

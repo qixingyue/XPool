@@ -12,14 +12,17 @@ void do_real_task(struct x_task_data *data){
 
 	/*php_printf("%s\n",data->buf);*/
 
-	MAKE_STD_ZVAL(arg);
+ 	MAKE_STD_ZVAL(arg);
 	ZVAL_STRINGL(arg,data->buf,strlen(data->buf),0);
 
-	if( 
-			zend_hash_find( 
+	
+	TSRMLS_FETCH();
+
+	if(
+			zend_hash_find(
 				EG(active_symbol_table),
-			 	XPOOL_G(xpool_var_name),
-			 	strlen(XPOOL_G(xpool_var_name)) + 1 , 
+				 XPOOL_G(xpool_var_name),
+				 strlen(XPOOL_G(xpool_var_name)) + 1 ,
 				(void**) &self_pp
 			) == SUCCESS
 		) {
