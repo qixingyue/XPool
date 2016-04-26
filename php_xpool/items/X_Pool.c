@@ -3,11 +3,11 @@
 
 #include "main/SAPI.h"
 
-struct task_data {
+struct x_task_data {
 	char buf[X_MAX_SIZE];
 };
 
-void do_real_task(struct task_data *data){
+void do_real_task(struct x_task_data *data){
  	zval **self_pp, *retval , *arg;
 
 	/*php_printf("%s\n",data->buf);*/
@@ -32,7 +32,7 @@ void do_real_task(struct task_data *data){
 zend_class_entry *X_Pool_class_ce;
 
 PHP_METHOD(X_Pool,addTask){
-	struct task_data data;
+	struct x_task_data data;
 	char *buf;
 	int len;
 	int res;
@@ -70,7 +70,7 @@ PHP_METHOD(X_Pool,init){
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l|l",&worker_count,&max_free_tick) == FAILURE) {
 			RETURN_LONG(XPOOL_INIT_FAILED);
 		}
-		r = xpool_init(worker_count,max_free_tick,do_real_task,sizeof(struct task_data) );
+		r = xpool_init(worker_count,max_free_tick,do_real_task,sizeof(struct x_task_data) );
 		if( r == 0) {
 			RETURN_LONG(XPOOL_INIT_OK);
 		} else {
@@ -109,6 +109,7 @@ XPOOL_STARTUP_FUNCTION(X_Pool){
 		X_Pool_class_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	} 
 
+	return SUCCESS;
 }
 
 
