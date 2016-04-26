@@ -35,7 +35,7 @@ void do_real_task(struct x_task_data *data){
 zend_class_entry *X_Pool_class_ce;
 
 PHP_METHOD(X_Pool,addTask){
-	struct x_task_data data;
+	struct x_task_data data = {'\0'};
 	char *buf;
 	int len;
 	int res;
