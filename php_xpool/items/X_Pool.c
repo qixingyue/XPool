@@ -14,8 +14,6 @@ void do_real_task(struct x_task_data *data){
 
  	MAKE_STD_ZVAL(arg);
 	ZVAL_STRINGL(arg,data->buf,strlen(data->buf),0);
-
-	
 	TSRMLS_FETCH();
 
 	if(
@@ -27,6 +25,10 @@ void do_real_task(struct x_task_data *data){
 			) == SUCCESS
 		) {
 		zend_call_method_with_1_params(self_pp,Z_OBJCE_PP(self_pp),NULL,"handle",&retval,arg);	
+
+		zval_ptr_dtor(&arg);
+		zval_ptr_dtor(&retval);
+		
 	} else {
 			
 	}
